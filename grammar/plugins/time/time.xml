@@ -1,0 +1,66 @@
+﻿<grammar version="1.0" xml:lang="fr-FR" mode="voice"  root="ruleTime" xmlns="http://www.w3.org/2001/06/grammar" tag-format="semantics/1.0">
+	<rule id="ruleTime" scope="public">
+		<example>Sarah il est quelle heure ?</example>
+		<tag>out.action=new Object(); </tag>
+		<item>Sarah</item> 
+		<one-of>
+			<item>il est quelle heure <tag>out.action = rules.ruleCheckEvent;</tag>
+			</item>
+			<item>quelle heure est il ici</item>
+			<item>peux tu me donner l'heure</item>
+			<item>tu peux me donner l'heure</item>
+		</one-of>
+		<tag>out.action._attributes.uri="http://127.0.0.1:8080/sarah/time";</tag>
+	</rule>
+	<rule id="ruleTime2" scope="public">
+		<example>Sarah il fait jour ?</example>
+		<tag>out.action=new Object(); </tag>
+		<item>Sarah</item> 
+		<one-of>
+			<item>il fait jour</item>
+			<item>il fait jours dehors</item>
+			<item>le jour est levé</item>
+		</one-of>
+		<tag>out.action._attributes.uri="http://127.0.0.1:8080/sarah/jour";</tag>
+	</rule>
+	<rule id="ruleCalendar">
+		<tag>out.action=new Object(); </tag>
+		<item>Sarah</item>
+		<one-of>
+			<item>
+				<ruleref uri="#ruleCheckEvent"/>
+				<tag>out.action = rules.ruleCheckEvent;</tag>
+			</item>
+			<item>
+				<ruleref uri="#ruleAddEvent"/>
+				<tag>out.action = rules.ruleAddEvent;</tag>
+			</item>
+			<item>
+				<ruleref uri="#ruleAddReminder"/>
+				<tag>out.action = rules.ruleAddReminder;</tag>
+			</item>
+		</one-of>
+		<tag>out.action._attributes.uri="http://127.0.0.1:8080/sarah/calendar";</tag>
+	</rule>
+
+	<rule id="ruleCheckEvent">
+		<example>Sarah qu'est ce qui est prévu aujourd'hui ?</example>
+		<tag>
+      out.action=new Object();
+      out.check="next";
+		</tag>
+		<one-of>
+			<item>qu'est ce qui est prévu</item>
+			<item>quelle est le planning</item>
+			<item>est ce que j'ai des rendez-vous</item>
+		</one-of>
+		<item repeat="0-1">
+			<one-of>
+				<item>aujourd'hui <tag>out.check="today";</tag>
+				</item>
+				<item>demain <tag>out.check="tomorrow";</tag>
+				</item>
+			</one-of>
+		</item>
+	</rule>
+</grammar>
