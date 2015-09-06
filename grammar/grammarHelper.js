@@ -1,16 +1,18 @@
 'use strict';
 var globalTag="";
 var globalRunning =false;
+var globalCallback;
 
 /**
 	Fonction Asynchrone chargeant la liste des plugins et les teste 1 par 1
-	le r�sultat du test et transmis par la fonction testPlugin à la fonction notifyResponse
+	le résultat du test et transmis par la fonction testPlugin à  la fonction notifyResponse
 	@pluginsFolder 	: chemin vers les plugins
-	@speech			: phrase à soumettre à l'ensemble de ces règles
+	@speech			: phrase à  soumettre à  l'ensemble de ces règles
 */
-function getListGrammar(pluginsFolder,speech){
+function getListGrammar(pluginsFolder,speech,callback){
 	globalRunning =true;
 	globalTag ="";
+	globalCallback=callback;
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.open("GET", pluginsFolder, true);
 	xmlhttp.onreadystatechange=function() {
@@ -39,9 +41,9 @@ function getListGrammar(pluginsFolder,speech){
 
 /**
 	Fonction Asynchrone soumettant la phrase au premier plugin de la liste
-	Si le résultat est concluant, il est transmis à la fonction notifyResponse
+	Si le résultat est concluant, il est transmis à  la fonction notifyResponse
 	@list 	: tableau de String contenant un ensemble de chemin vers les fichiers XML des plugins
-	@speech : phrase à soumettre à l'ensemble de ces règles
+	@speech : phrase à  soumettre à  l'ensemble de ces règles
 */
 function testPlugin(list,speech){
 	if (list.length==0){
@@ -72,7 +74,7 @@ function testPlugin(list,speech){
 }	
 
 /**
-	Fonction permettant de notifier à l'utilisateur le résultat de la rechercher
+	Fonction permettant de notifier à  l'utilisateur le résultat de la rechercher
 	@pluginPath : chemin du fichier XML contenant la règle
 	@rule 		: règle appliquée
 	@script		: script résultant des règles appliquées
@@ -80,13 +82,14 @@ function testPlugin(list,speech){
 function notifyResponse(pluginPath,rule,script){
 	console.log(rule);
 	console.log(script);
+	globalCallback(script);
 	globalRunning =false;
 }
 
 /**
 	Teste un ensemble de règles contenues dans un fichier XML en fonction d'une phrase
 	@xmlDoc : Document parsé
-	@words 	: phrase à tester
+	@words 	: phrase à  tester
 	-> Retourne une règle si concluant
  */
 function findRule(xmlDoc, words) {
@@ -142,7 +145,7 @@ function getRule(xmlDoc, ruleId) {
 	Teste une règle en fonction d'une phrase
 	@xmlDoc 	: Document xml Parsé
 	@rule 		: Id de la règle
-	@splitWords : Tableau de string représentant la phrase ou partie de phrase à soumettre
+	@splitWords : Tableau de string représentant la phrase ou partie de phrase à  soumettre
 	-> Retourne  position actuelle dans la phrase
  */
 function checkRule(xmlDoc,rule, splitWords) {
@@ -168,8 +171,8 @@ function checkRule(xmlDoc,rule, splitWords) {
 /**
 	Fonction traitant un éléement d'une règle
 	@xmlDoc 	: Document xml Parsé
-	@element	: Element XML à traiter
-	@splitWords : Tableau de string représentant la phrase ou partie de phrase à soumettre
+	@element	: Element XML à  traiter
+	@splitWords : Tableau de string représentant la phrase ou partie de phrase à  soumettre
 	-> Retourne  position actuelle dans la phrase
 */
 function checkElement(xmlDoc, element, splitWords) {
@@ -333,8 +336,8 @@ function checkOneOf(xmlDoc,child, words) {
 /**
 	Fonction Comparant la valeur d'un item avec une liste de mot
 	returne la position actuelle du dernier mot trouvé dans la phrase.
-	@itemValue = chaine de caractère à rechercher
-	@splitWords = partie de la phrase à traitée
+	@itemValue = chaine de caractère à  rechercher
+	@splitWords = partie de la phrase à  traitée
 	-> result = -1 si non trouvé|| position actuelle dans la phrase
  */
 
