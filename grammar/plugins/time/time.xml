@@ -10,7 +10,7 @@
 			<item>peux tu me donner l'heure</item>
 			<item>tu peux me donner l'heure</item>
 		</one-of>
-		<tag>out.action._attributes.uri="http://127.0.0.1:8080/sarah/time";</tag>
+		<tag>out.action._attributes.uri="plugins/time/time.js";</tag>
 	</rule>
 	<rule id="ruleTime2" scope="public">
 		<example>Sarah il fait jour ?</example>
@@ -21,7 +21,7 @@
 			<item>il fait jours dehors</item>
 			<item>le jour est levé</item>
 		</one-of>
-		<tag>out.action._attributes.uri="http://127.0.0.1:8080/sarah/jour";</tag>
+		<tag>out.action._attributes.uri="plugins/time/jour.js";</tag>
 	</rule>
 	<rule id="ruleCalendar">
 		<tag>out.action=new Object(); </tag>
@@ -40,7 +40,7 @@
 				<tag>out.action = rules.ruleAddReminder;</tag>
 			</item>
 		</one-of>
-		<tag>out.action._attributes.uri="http://127.0.0.1:8080/sarah/calendar";</tag>
+		<tag>out.action._attributes.uri="plugins/time/calendar.js";</tag>
 	</rule>
 
 	<rule id="ruleCheckEvent">
