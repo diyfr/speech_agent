@@ -313,7 +313,7 @@ if (!('webkitSpeechRecognition' in window)) {
       // Fin de la transcription
 	  showLog('Fin de la transcription');
 	  // Appel de la grammaire ici !!!
-	  var rule =getListGrammar('plugins/',final_transcript,showLog);
+	  var rule =getListGrammar('plugins/',final_transcript,executeAction);
     }
   };
 }
@@ -382,6 +382,47 @@ function startButton(event) {
   showInfo('info_allow');
   showButtons('none');
   start_timestamp = event.timeStamp;
+}
+
+function executeAction(script){
+var out= new Object();
+console.log(script);
+eval(script);
+if (out && out.uri){
+	loadScript(out.uri,makeResponse);
+	}
+}
+
+function loadScript(src, callback)
+{
+console.log('Load script '+src);
+  var s,
+      r,
+      t;
+  r = false;
+  s = document.createElement('script');
+  s.type = 'text/javascript';
+  s.src = src;
+  s.onload = s.onreadystatechange = function() {
+    //console.log( this.readyState ); //uncomment this line to see which ready states are called.
+    if ( !r && (!this.readyState || this.readyState == 'complete') )
+    {
+      r = true;
+	  console.log('Script loaded');
+	  action(callback);
+    }
+  };
+  t = document.getElementsByTagName('script')[0];
+  t.parentNode.insertBefore(s, t);
+}
+function makeResponse(obj){
+console.log('makeResponse');
+	if (obj.tts){
+			var msg = new SpeechSynthesisUtterance();
+			msg.text = obj.tts;
+			msg.lang = 'fr-FR';	
+			window.speechSynthesis.speak(msg);
+		}
 }
 
 function showInfo(s) {
